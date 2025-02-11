@@ -1,19 +1,175 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./ProductDetail.css"; // Keep your CSS styles
+import "./ProductDetail.css"; // Import your CSS file
 
-const RentHouseDetails = ({ property }) => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(null);
-  const navigate = useNavigate();
+const PropertyHeader = () => (
+  <div className="property-header">
+    <h1>Spacious 3-Bedroom Apartment</h1>
+    <div className="price">$2,500 / Month</div>
+  </div>
+);
 
-  if (!property) {
-    return (
-      <div>
-        <h2>No property data found.</h2>
-        <button onClick={() => navigate("/")}>Go Back</button>
+const Gallery = ({ openSlider }) => (
+  <div className="gallery">
+    <img
+      src="https://via.placeholder.com/400x400?text=Living+Room"
+      alt="Living Room"
+      onClick={() => openSlider(0)}
+    />
+    <div className="row">
+      <img
+        src="https://via.placeholder.com/200x200?text=Kitchen"
+        alt="Kitchen"
+        onClick={() => openSlider(1)}
+      />
+      <div className="image-container">
+        <img
+          src="https://via.placeholder.com/200x200?text=Bedroom"
+          alt="Bedroom"
+          onClick={() => openSlider(2)}
+        />
+        <div className="overlay image-count" onClick={() => openSlider(3)}>
+          + More Images
+        </div>
       </div>
-    );
-  }
+    </div>
+  </div>
+);
+
+const PropertyDetails = () => (
+  <div className="property-details">
+    <h2>Property Details</h2>
+    <table>
+      <tbody>
+        <tr>
+          <th>
+            <i className="fas fa-bed"></i> No. of Bedrooms
+          </th>
+          <td>2</td>
+        </tr>
+        <tr>
+          <th>
+            <i className="fas fa-bath"></i> No. of Bathrooms
+          </th>
+          <td>2</td>
+        </tr>
+        <tr>
+          <th>
+            <i className="fas fa-ruler"></i> Size
+          </th>
+          <td>1,500 sq. ft.</td>
+        </tr>
+        <tr>
+          <th>
+            <i className="fas fa-car"></i> Parking
+          </th>
+          <td>Parking available</td>
+        </tr>
+        <tr>
+          <th>
+            <i className="fas fa-wifi"></i> Amenities
+          </th>
+          <td>Wi-Fi included</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+);
+
+const ActionButtons = () => (
+  <div className="action-buttons">
+    <button className="button owner-details-btn">
+      <i className="fas fa-user"></i> Get Owner Details
+    </button>
+    <button className="button schedule-visit-btn">
+      <i className="fas fa-calendar-alt"></i>
+      <span className="tooltip-text">Schedule a Visit</span>
+    </button>
+    <button className="button message-owner-btn">
+      <i className="fas fa-comment-alt"></i>
+      <span className="tooltip-text">Message Owner</span>
+    </button>
+  </div>
+);
+
+const Overview = () => (
+  <div className="overview">
+    <h2>Overview</h2>
+    <div className="overview-details">
+      {[
+        { icon: "fas fa-couch", text: "Furnishing Status: Unfurnished" },
+        { icon: "fas fa-compass", text: "Facing: Don't Know" },
+        { icon: "fas fa-tint", text: "Water Supply: Both" },
+        { icon: "fas fa-building", text: "Floor: 1/1" },
+        { icon: "fas fa-bath", text: "Bathroom: 1" },
+        { icon: "fas fa-utensils", text: "Non-Veg Allowed: Yes" },
+        { icon: "fas fa-lock", text: "Gated Security: No" },
+      ].map((item, index) => (
+        <div className="overview-item" key={index}>
+          <i className={item.icon}></i>
+          <span>{item.text}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const Description = () => (
+  <div className="details">
+    <h2>Description</h2>
+    <p>
+      This stunning 3-bedroom apartment is located in the heart of downtown,
+      offering easy access to parks, shopping, and public transport...
+    </p>
+    <p>
+      The apartment boasts high-end finishes, including hardwood floors,
+      stainless steel appliances, and quartz countertops in the kitchen...
+    </p>
+  </div>
+);
+
+const Amenities = () => (
+  <div className="amenities">
+    <h2>Amenities</h2>
+    <div className="amenities-list">
+      {[
+        { icon: "fas fa-snowflake", text: "Air Conditioning" },
+        { icon: "fas fa-dumbbell", text: "Fitness Center" },
+        { icon: "fas fa-swimmer", text: "Swimming Pool" },
+        { icon: "fas fa-shield-alt", text: "24/7 Security" },
+        { icon: "fas fa-paw", text: "Pet Friendly" },
+      ].map((item, index) => (
+        <div className="amenity-item" key={index}>
+          <i className={item.icon}></i>
+          <span>{item.text}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const Slider = ({ images, currentImageIndex, setImageIndex, closeSlider }) => (
+  <div className="slider-overlay" style={{ display: currentImageIndex !== null ? "flex" : "none" }}>
+    <button className="close" onClick={closeSlider}>
+      &times;
+    </button>
+    <div className="navigation">
+      <button onClick={() => setImageIndex((currentImageIndex - 1 + images.length) % images.length)}>
+        &larr; Prev
+      </button>
+      <button onClick={() => setImageIndex((currentImageIndex + 1) % images.length)}>Next &rarr;</button>
+    </div>
+    <img src={images[currentImageIndex]} alt="Slider Image" />
+  </div>
+);
+
+const RentHouseDetails = () => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(null);
+
+  const images = [
+    "https://via.placeholder.com/400x400?text=Living+Room",
+    "https://via.placeholder.com/200x200?text=Kitchen",
+    "https://via.placeholder.com/200x200?text=Bedroom",
+  ];
 
   return (
     <div>
@@ -21,110 +177,26 @@ const RentHouseDetails = ({ property }) => {
         <h1>Rent House Details</h1>
       </header>
       <div className="container">
-        <div className="property-header">
-          <h1>{property.propertyName}</h1>
-          <div className="price">{property.price || "$ N/A"}</div>
-        </div>
-
+        <PropertyHeader />
         <div className="property-layout">
-          {/* Dynamic Image Gallery */}
-          <div className="gallery">
-            {property.images.map((src, index) => (
-              <img key={index} src={URL.createObjectURL(src)} alt={`Property Image ${index + 1}`} onClick={() => setCurrentImageIndex(index)} />
-            ))}
-          </div>
-
+          <Gallery openSlider={setCurrentImageIndex} />
           <div className="details">
-            <div className="property-details">
-              <h2>Property Details</h2>
-              <table>
-                <tbody>
-                  <tr>
-                    <th><i className="fas fa-bed"></i> No. of Bedrooms</th>
-                    <td>{property.bedrooms}</td>
-                  </tr>
-                  <tr>
-                    <th><i className="fas fa-bath"></i> No. of Bathrooms</th>
-                    <td>{property.bathrooms}</td>
-                  </tr>
-                  <tr>
-                    <th><i className="fas fa-ruler"></i> Size</th>
-                    <td>{property.size} sq. ft.</td>
-                  </tr>
-                  <tr>
-                    <th><i className="fas fa-car"></i> Parking</th>
-                    <td>{property.parking}</td>
-                  </tr>
-                  <tr>
-                    <th><i className="fas fa-wifi"></i> Amenities</th>
-                    <td>{property.amenities}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div className="action-buttons">
-              <button className="button owner-details-btn"><i className="fas fa-user"></i> Get Owner Details</button>
-              <button className="button schedule-visit-btn"><i className="fas fa-calendar-alt"></i> Schedule a Visit</button>
-              <button className="button message-owner-btn"><i className="fas fa-comment-alt"></i> Message Owner</button>
-            </div>
+            <PropertyDetails />
+            <ActionButtons />
           </div>
         </div>
-
-        {/* Overview Section */}
-        <div className="overview">
-          <h2>Overview</h2>
-          <div className="overview-details">
-            {[
-              { icon: "fas fa-couch", text: `Furnishing Status: ${property.furnishingStatus}` },
-              { icon: "fas fa-compass", text: `Facing: ${property.facing}` },
-              { icon: "fas fa-tint", text: `Water Supply: ${property.waterSupply}` },
-              { icon: "fas fa-building", text: `Floor: ${property.floor}` },
-              { icon: "fas fa-bath", text: `Bathrooms: ${property.bathrooms}` },
-              { icon: "fas fa-utensils", text: `Non-Veg Allowed: ${property.nonVegAllowed}` },
-              { icon: "fas fa-lock", text: `Gated Security: ${property.gatedSecurity}` },
-            ].map((item, index) => (
-              <div className="overview-item" key={index}>
-                <i className={item.icon}></i>
-                <span>{item.text}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Description Section */}
-        <div className="details">
-          <h2>Description</h2>
-          <p>{property.description}</p>
-        </div>
-
-        {/* Amenities Section */}
-        <div className="amenities">
-          <h2>Amenities</h2>
-          <div className="amenities-list">
-            {property.amenities.split(",").map((amenity, index) => (
-              <div className="amenity-item" key={index}>
-                <i className="fas fa-check"></i>
-                <span>{amenity.trim()}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        <Overview />
+        <Description />
+        <Amenities />
       </div>
-
-      {/* Image Slider */}
-      {currentImageIndex !== null && (
-        <div className="slider-overlay">
-          <button className="close" onClick={() => setCurrentImageIndex(null)}>&times;</button>
-          <div className="navigation">
-            <button onClick={() => setCurrentImageIndex((currentImageIndex - 1 + property.images.length) % property.images.length)}>&larr; Prev</button>
-            <button onClick={() => setCurrentImageIndex((currentImageIndex + 1) % property.images.length)}>Next &rarr;</button>
-          </div>
-          <img src={URL.createObjectURL(property.images[currentImageIndex])} alt="Slider Image" />
-        </div>
-      )}
+      <Slider
+        images={images}
+        currentImageIndex={currentImageIndex}
+        setImageIndex={setCurrentImageIndex}
+        closeSlider={() => setCurrentImageIndex(null)}
+      />
     </div>
   );
 };
 
-export default RentHouseDetails;
+export default RentHouseDetails;   
